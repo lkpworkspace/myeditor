@@ -1,0 +1,6 @@
+{
+    "log_dir":"log",
+    "lib_dir":"lib",
+    "panel_conf_dir":"panel",
+    "log_max_size_mb":100 
+}
