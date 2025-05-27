@@ -1,0 +1,12 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
+
+### install
+file(GLOB conf_files "*.json")
+install(FILES
+  ${conf_files}
+  PERMISSIONS
+  OWNER_READ OWNER_WRITE
+  GROUP_READ
+  WORLD_READ
+  DESTINATION ${MYEDITOR_PANEL_DIR}
+)

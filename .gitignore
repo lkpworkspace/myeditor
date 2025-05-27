@@ -34,3 +34,6 @@
 .vscode
 output
 build*
+myeditor/export.h
+imgui.ini
+tmp

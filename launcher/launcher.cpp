@@ -22,6 +22,7 @@
 #include <GLES2/gl2.h>
 #endif
 #include <GLFW/glfw3.h>  // Will drag system OpenGL headers
+#include "myeditor/editor.h"
 
 // [Win32] Our example includes a copy of glfw3.lib pre-compiled with VS2010 to
 // maximize ease of testing and compatibility with old VS compilers. To link
@@ -157,6 +158,8 @@ int main(int argc, char **argv) {
   ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
   // Main loop
+  auto myeditor = std::make_shared<myeditor::Editor>();
+  myeditor->Init();
 #ifdef __EMSCRIPTEN__
   // For an Emscripten build we are disabling file-system access, so let's not
   // attempt to do a fopen() of the imgui.ini file. You may manually call
@@ -186,6 +189,9 @@ int main(int argc, char **argv) {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
+
+    myeditor->Update();
+    myeditor->ProcMessage();
 
     // 1. Show the big demo window (Most of the sample code is in
     // ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear
@@ -240,6 +246,7 @@ int main(int argc, char **argv) {
     }
 
     // Rendering
+    myeditor->Render();
     ImGui::Render();
     int display_w, display_h;
     glfwGetFramebufferSize(window, &display_w, &display_h);

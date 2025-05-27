@@ -51,5 +51,5 @@ find_package(imgui REQUIRED)
 ### editor
 add_subdirectory(3rd/nativefiledialog)
 add_subdirectory(3rd/stb)
-# add_subdirectory(myditor)
+add_subdirectory(myeditor)
 add_subdirectory(launcher)

@@ -1,0 +1,12 @@
+{
+    "type":"class",
+    "panel":{
+        "Log":[
+            {
+                "name":"1",
+                "config":{
+                }
+            }
+        ]
+    }
+}
