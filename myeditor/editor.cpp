@@ -9,8 +9,9 @@ Author: 李柯鹏 <likepeng0418@163.com>
 #include "myeditor/log.h"
 #include "myeditor/mod_manager.h"
 #include "myeditor/panel_context_manager.h"
-#include "myeditor/builtin/panel_log.h"
 #include "myeditor/panel_context.h"
+#include "myeditor/builtin/panel_log.h"
+#include "myeditor/builtin/panel_menu.h"
 
 namespace myeditor {
 
@@ -57,6 +58,9 @@ bool Editor::Init(const EditorConfig& config) {
   // reg builtin panel
   mod_manager_->RegPanel("PanelLog", [](const std::string&){
     return std::make_shared<PanelLog>();
+  });
+  mod_manager_->RegPanel("PanelMenu", [](const std::string&){
+    return std::make_shared<PanelMenu>();
   });
 
   state_.store(State::kInitialized);

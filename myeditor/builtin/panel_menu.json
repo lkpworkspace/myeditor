@@ -1,0 +1,15 @@
+{
+  "type": "class",
+  "lib": "",
+  "panel": {
+    "PanelMenu": [
+      {
+        "name": "1",
+        "config": {
+          "show": true,
+          "display_menu": true
+        }
+      }
+    ]
+  }
+}
