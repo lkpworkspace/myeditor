@@ -6,26 +6,21 @@ Author: 李柯鹏 <likepeng0418@163.com>
 ****************************************************************************/
 #include "myeditor/mod_manager.h"
 
-#include "myframe/common.h"
 #include "myframe/shared_library.h"
 
 #include "myeditor/log.h"
 #include "myeditor/panel.h"
+#include "myeditor/panel_context.h"
 
 namespace myeditor {
 
-ModManager::ModManager() {
+ModManager::ModManager(const std::string& lib_dir) {
   LOG(INFO) << "ModManager create";
+  lib_dir_ = myframe::Common::GetAbsolutePath(lib_dir);
 }
 
 ModManager::~ModManager() {
   LOG(INFO) << "ModManager deconstruct";
-}
-
-bool ModManager::LoadPanelContext(const Json::Value& config,
-  std::vector<std::shared_ptr<PanelContext>>* panel_ctx_list) {
-  // TODO load panel inst from config
-  return true;
 }
 
 bool ModManager::LoadMod(const std::string& dl_path) {
@@ -58,7 +53,7 @@ bool ModManager::RegPanel(
   return true;
 }
 
-std::shared_ptr<Panel> ModManager::CreatePanelInst(
+std::shared_ptr<Panel> ModManager::CreatePanel(
   const std::string& mod_or_class_name, const std::string& panel_name) {
   {
     std::shared_lock<std::shared_mutex> lk(mods_rw_);
@@ -91,6 +86,87 @@ std::shared_ptr<Panel> ModManager::CreatePanelInst(
     return panel;
   }
   return nullptr;
+}
+
+bool ModManager::CreatePanelContext(const Json::Value& config,
+  std::vector<std::shared_ptr<PanelContext>>* panel_ctx_list) {
+  if (panel_ctx_list == nullptr) {
+    LOG(ERROR) << "panel_ctx_list is nullptr";
+    return false;
+  }
+  if (!config.isMember("type")) {
+    LOG(ERROR) << "no type member";
+    return false;
+  }
+  if (!config["type"].isString()) {
+    LOG(ERROR) << "type member not string";
+    return false;
+  }
+  std::string type = config["type"].asString();
+  std::string lib_name;
+  // load lib
+  if (type != "class") {
+    if (!config.isMember("lib")) {
+      LOG(ERROR) << "no lib member";
+      return false;
+    }
+    if (!config["lib"].isString()) {
+      LOG(ERROR) << "lib member not string";
+      return false;
+    }
+    lib_name = config["lib"].asString();
+    lib_name = myframe::Common::GetLibName(lib_name);
+    if (!LoadMod(lib_dir_ / lib_name)) {
+      LOG(ERROR) << "load " << lib_name << "failed";
+      return false;
+    }
+  }
+
+  // create panel instance
+  if (!config.isMember("panel")) {
+    LOG(INFO) << "no panel conf, skip";
+    return true;
+  }
+  if (!config["panel"].isObject()) {
+    LOG(ERROR) << "panel member not obj";
+    return false;
+  }
+  const auto& panel_list = config["panel"];
+  Json::Value::Members panel_class_name_list = panel_list.getMemberNames();
+  for (auto class_name_it = panel_class_name_list.begin();
+        class_name_it != panel_class_name_list.end(); ++class_name_it) {
+    std::string panel_class_name = *class_name_it;
+    auto panel_inst_list = panel_list[panel_class_name];
+    for (const auto& inst : panel_inst_list) {
+      if (!inst.isMember("name")) {
+        LOG(ERROR)
+          << "panel " << panel_class_name
+          << " key \"name\": no key, skip";
+        return false;
+      }
+      std::shared_ptr<Panel> panel = nullptr;
+      if (type == "class") {
+        panel = CreatePanel(type, panel_class_name);
+      } else if (type == "library") {
+        panel = CreatePanel(lib_name, panel_class_name);
+      } else {
+        LOG(ERROR) << "Unknown type" << type;
+        return false;
+      }
+      if (panel == nullptr) {
+        LOG(ERROR) << "Create panel failed";
+        return false;
+      }
+      // create panel context instance
+      auto panel_ctx = std::make_shared<PanelContext>(std::move(panel));
+      panel_ctx->SetModName(type == "class" ? "class" : lib_name);
+      panel_ctx->SetClassName(panel_class_name);
+      panel_ctx->SetInstName(inst["name"].asString());
+      panel_ctx->LoadConf(inst);
+      panel_ctx_list->push_back(panel_ctx);
+    }
+  }
+  return true;
 }
 
 }  // namespace myeditor

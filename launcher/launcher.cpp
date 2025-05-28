@@ -22,7 +22,9 @@
 #include <GLES2/gl2.h>
 #endif
 #include <GLFW/glfw3.h>  // Will drag system OpenGL headers
+#include "myframe/common.h"
 #include "myeditor/editor.h"
+#include "myeditor/log.h"
 
 // [Win32] Our example includes a copy of glfw3.lib pre-compiled with VS2010 to
 // maximize ease of testing and compatibility with old VS compilers. To link
@@ -50,6 +52,18 @@ int main(int argc, char **argv) {
   myeditor::ModuleArgument module_args;
   module_args.ParseArgument(argc, argv);
   std::cout << module_args << std::endl;
+
+  auto root_dir = myframe::Common::GetWorkRoot();
+  stdfs::path log_dir = module_args.GetLogDir();
+  stdfs::path lib_dir = module_args.GetLibDir();
+  log_dir = myframe::Common::GetAbsolutePath(log_dir.string());
+  lib_dir = myframe::Common::GetAbsolutePath(lib_dir.string());
+  myeditor::InitLog(log_dir.string(), module_args.GetProcessName());
+
+  auto myeditor = std::make_shared<myeditor::Editor>();
+  myeditor::EditorConfig config;
+  config.lib_dir = module_args.GetLibDir();
+  myeditor->Init(config);
 
   glfwSetErrorCallback(glfw_error_callback);
   if (!glfwInit()) return 1;
@@ -85,7 +99,7 @@ int main(int argc, char **argv) {
 
   // Create window with graphics context
   GLFWwindow *window = glfwCreateWindow(
-      1280, 720, "Dear ImGui GLFW+OpenGL3 example", nullptr, nullptr);
+      1280, 720, module_args.GetProcessName().c_str(), nullptr, nullptr);
   if (window == nullptr) return 1;
   glfwMakeContextCurrent(window);
   glfwSwapInterval(1);  // Enable vsync
@@ -158,8 +172,30 @@ int main(int argc, char **argv) {
   ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
   // Main loop
-  auto myeditor = std::make_shared<myeditor::Editor>();
-  myeditor->Init();
+  if (!module_args.GetPanelConfList().empty()) {
+    auto panel_list = module_args.GetPanelConfList();
+    for (auto panel_conf : panel_list) {
+      std::string full_path = myframe::Common::GetAbsolutePath(panel_conf);
+      auto json_panel_conf = myframe::Common::LoadJsonFromFile(full_path);
+      if (!myeditor->LoadPanel(json_panel_conf)) {
+        LOG(ERROR) << "load " << full_path << " failed";
+        return -1;
+      }
+    }
+  } else {
+    auto panel_conf_dir = module_args.GetPanelConfDir();
+    panel_conf_dir = myframe::Common::GetAbsolutePath(panel_conf_dir);
+    auto panel_list = myframe::Common::GetDirFiles(panel_conf_dir);
+    for (auto panel_conf : panel_list) {
+      std::string full_path = myframe::Common::GetAbsolutePath(panel_conf);
+      auto json_panel_conf = myframe::Common::LoadJsonFromFile(full_path);
+      if (!myeditor->LoadPanel(json_panel_conf)) {
+        LOG(ERROR) << "load " << full_path << " failed";
+        return -1;
+      }
+    }
+  }
+  LOG(INFO) << "begin loop";
 #ifdef __EMSCRIPTEN__
   // For an Emscripten build we are disabling file-system access, so let's not
   // attempt to do a fopen() of the imgui.ini file. You may manually call
@@ -189,6 +225,10 @@ int main(int argc, char **argv) {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
+
+    glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w,
+                 clear_color.z * clear_color.w, clear_color.w);
+    glClear(GL_COLOR_BUFFER_BIT);
 
     myeditor->Update();
     myeditor->ProcMessage();
@@ -251,9 +291,9 @@ int main(int argc, char **argv) {
     int display_w, display_h;
     glfwGetFramebufferSize(window, &display_w, &display_h);
     glViewport(0, 0, display_w, display_h);
-    glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w,
-                 clear_color.z * clear_color.w, clear_color.w);
-    glClear(GL_COLOR_BUFFER_BIT);
+    // glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w,
+    //              clear_color.z * clear_color.w, clear_color.w);
+    // glClear(GL_COLOR_BUFFER_BIT);
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
     // Update and Render additional Platform Windows
@@ -282,5 +322,6 @@ int main(int argc, char **argv) {
   glfwDestroyWindow(window);
   glfwTerminate();
 
+  // myeditor::ShutdownLog();
   return 0;
 }

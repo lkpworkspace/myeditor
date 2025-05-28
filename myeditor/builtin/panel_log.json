@@ -1,12 +1,15 @@
 {
-    "type":"class",
-    "panel":{
-        "Log":[
-            {
-                "name":"1",
-                "config":{
-                }
-            }
-        ]
-    }
+  "type": "class",
+  "lib": "",
+  "panel": {
+    "PanelLog": [
+      {
+        "name": "1",
+        "config": {
+          "show":true,
+          "display_menu":true
+        }
+      }
+    ]
+  }
 }

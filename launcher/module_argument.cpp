@@ -102,6 +102,10 @@ bool ModuleArgument::ParseSysConf(const std::string& sys_conf) {
       || !root.isObject()) {
     return false;
   }
+  if (root.isMember("name")
+      && root["name"].isString()) {
+    process_name_ = root["name"].asString();
+  }
   if (root.isMember("log_dir")
       && root["log_dir"].isString()) {
     log_dir_ = root["log_dir"].asString();

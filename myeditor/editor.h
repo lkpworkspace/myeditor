@@ -5,12 +5,21 @@ All rights reserved.
 Author: 李柯鹏 <likepeng0418@163.com>
 ****************************************************************************/
 #pragma once
+#include <string>
 #include <memory>
+#include <atomic>
+#include <json/json.h>
 
 #include "myeditor/export.h"
 #include "myeditor/rate_ctrl.h"
 
 namespace myeditor {
+
+struct MYEDITOR_EXPORT EditorConfig {
+  EditorConfig();
+
+  std::string lib_dir;
+};
 
 class ModManager;
 class PanelContextManager;
@@ -24,7 +33,9 @@ class MYEDITOR_EXPORT Editor final {
   Editor();
   virtual ~Editor();
 
-  bool Init();
+  bool Init(const EditorConfig& config);
+
+  bool LoadPanel(const Json::Value& config);
 
   void Update();
 
@@ -34,8 +45,10 @@ class MYEDITOR_EXPORT Editor final {
 
   bool Sleep();
 
+  PanelContextManager* GetPanelContextManager() const;
+
  private:
-  State state_{State::kUninitialized};
+  std::atomic<State> state_{State::kUninitialized};
   RateCtrl rate_ctrl_;
 
   std::unique_ptr<ModManager> mod_manager_;

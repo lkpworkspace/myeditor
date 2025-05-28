@@ -55,7 +55,13 @@ class MYEDITOR_EXPORT Panel {
    */
   virtual void Render() {}
 
+  std::string GetPanelName() const;
+
+  bool IsShow() const;
+
  private:
+  void SetPanelContext(PanelContext*);
+
   PanelContext* ctx_{nullptr};
 };
 

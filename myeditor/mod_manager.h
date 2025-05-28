@@ -15,6 +15,7 @@ Author: 李柯鹏 <likepeng0418@163.com>
 #include <json/json.h>
 
 #include "myframe/macros.h"
+#include "myframe/common.h"
 #include "myframe/shared_library.h"
 
 #include "myeditor/export.h"
@@ -25,23 +26,26 @@ namespace myeditor {
 class Panel;
 class MYEDITOR_EXPORT ModManager final {
  public:
-  ModManager();
+  ModManager(const std::string& lib_dir = "lib");
   virtual ~ModManager();
-
-  bool LoadPanelContext(const Json::Value& config,
-    std::vector<std::shared_ptr<PanelContext>>* panel_ctx_list);
-
-  bool LoadMod(const std::string& dl_path);
 
   bool RegPanel(
     const std::string& class_name,
     std::function<std::shared_ptr<Panel>(const std::string&)> func);
 
- std::shared_ptr<Panel> CreatePanelInst(
+  bool CreatePanelContext(
+    const Json::Value& config,
+    std::vector<std::shared_ptr<PanelContext>>* panel_ctx_list);
+
+ private:
+  bool LoadMod(const std::string& dl_path);
+
+  std::shared_ptr<Panel> CreatePanel(
     const std::string& mod_or_class_name,
     const std::string& panel_name);
 
- private:
+  stdfs::path lib_dir_;
+
   std::shared_mutex class_panel_rw_;
   std::unordered_map<
       std::string, std::function<std::shared_ptr<Panel>(const std::string&)>>

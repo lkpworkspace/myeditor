@@ -6,6 +6,7 @@ add_subdirectory(builtin)
 aux_source_directory(. myeditor_srcs)
 add_library(${PROJECT_NAME} SHARED
   ${myeditor_srcs}
+  $<TARGET_OBJECTS:builtin_panel>
 )
 target_include_directories(${PROJECT_NAME}
   PUBLIC

@@ -19,19 +19,19 @@ bool PanelContextManager::RegPanelContext(
       LOG(ERROR) << "Reg panel context " << pc->GetPanelName() << " failed";
       return false;
     }
+    LOG(INFO) << "reg panel " << pc->GetPanelName();
     panel_ctxs_[pc->GetPanelName()] = pc;
     return true;
   }
   return false;
 }
 
-std::shared_ptr<PanelContext> PanelContextManager::GetPanelContext(
-  const std::string& panel_name) {
-  auto panel_ctx_it = panel_ctxs_.find(panel_name);
+void PanelContextManager::DispatchMessage(std::shared_ptr<myframe::Msg> msg) {
+  auto panel_ctx_it = panel_ctxs_.find(msg->GetDst());
   if (panel_ctx_it == panel_ctxs_.end()) {
-    return nullptr;
+    return;
   }
-  return panel_ctx_it->second;
+  panel_ctx_it->second->RecvMessage(std::move(msg));
 }
 
 void PanelContextManager::Update() {

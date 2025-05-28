@@ -1,4 +1,5 @@
 {
+    "name":"myeditor",
     "log_dir":"log",
     "lib_dir":"lib",
     "panel_conf_dir":"panel",

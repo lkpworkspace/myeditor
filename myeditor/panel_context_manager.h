@@ -9,6 +9,8 @@ Author: 李柯鹏 <likepeng0418@163.com>
 #include <string>
 #include <unordered_map>
 
+#include "myframe/msg.h"
+
 namespace myeditor {
 
 class PanelContext;
@@ -16,7 +18,7 @@ class PanelContextManager {
  public:
   bool RegPanelContext(std::shared_ptr<PanelContext> pc);
 
-  std::shared_ptr<PanelContext> GetPanelContext(const std::string& panel_name);
+  void DispatchMessage(std::shared_ptr<myframe::Msg>);
 
   void Update();
 
