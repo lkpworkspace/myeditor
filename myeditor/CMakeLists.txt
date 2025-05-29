@@ -15,12 +15,14 @@ target_include_directories(${PROJECT_NAME}
   $<INSTALL_INTERFACE:include>
 )
 target_link_libraries(${PROJECT_NAME}
-  PUBLIC
-  imgui
+  PRIVATE
   nativefiledialog
+  PUBLIC
   Threads::Threads
-  glog::glog
   JsonCpp::JsonCpp
+  glog::glog
+  GLEW::glew
+  imgui
 )
 
 # export file

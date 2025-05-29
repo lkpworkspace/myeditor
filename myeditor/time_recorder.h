@@ -26,27 +26,11 @@ class TimeRecorder {
  public:
   static TimeRecorder* Instance();
 
-  void Record(const std::string& desc) { _tss.emplace_back(++_idx, desc); }
+  void Record(const std::string& desc);
 
-  void Clear() {
-    _idx = 0;
-    _tss.clear();
-  }
+  void Clear();
 
-  std::string TimeCostInfo() {
-    if (_tss.empty()) {
-      return "";
-    }
-    std::stringstream ss;
-    ss << "time cost info:\n" << _tss[0].desc << "\n";
-    for (int i = 0; i < _tss.size() - 1; ++i) {
-      auto cost_ms = std::chrono::duration_cast<std::chrono::milliseconds>(
-                         _tss[i + 1].ts - _tss[i].ts)
-                         .count();
-      ss << _tss[i + 1].desc << " cost " << cost_ms << "ms\n";
-    }
-    return ss.str();
-  }
+  std::string TimeCostInfo();
 
  private:
   TimeRecorder() {}
