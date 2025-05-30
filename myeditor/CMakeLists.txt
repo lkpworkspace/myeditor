@@ -34,6 +34,7 @@ generate_export_header (${PROJECT_NAME}
 #### install
 set(myeditor_headers
   export.h
+  log.h
   rate_ctrl.h
   panel.h
   mod_manager.h
@@ -53,3 +54,4 @@ install(TARGETS ${PROJECT_NAME}
   ARCHIVE DESTINATION ${MYEDITOR_LIB_DIR}
   RUNTIME DESTINATION ${MYEDITOR_BIN_DIR}
 )
+include(InstallingConfigs)
