@@ -8,8 +8,6 @@ Author: 李柯鹏 <likepeng0418@163.com>
 #include <memory>
 #include <string>
 
-#include <json/json.h>
-
 #include "myframe/msg.h"
 #include "myeditor/export.h"
 

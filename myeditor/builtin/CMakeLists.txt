@@ -11,9 +11,9 @@ target_include_directories(builtin_panel
 )
 target_link_libraries(builtin_panel
   PUBLIC
-  imgui
   Threads::Threads
-  glog::glog
+  imgui
+  myframe
 )
 
 ### install
