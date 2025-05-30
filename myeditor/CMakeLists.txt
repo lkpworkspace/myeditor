@@ -19,10 +19,9 @@ target_link_libraries(${PROJECT_NAME}
   nativefiledialog
   PUBLIC
   Threads::Threads
-  JsonCpp::JsonCpp
-  glog::glog
   GLEW::glew
   imgui
+  myframe
 )
 
 # export file

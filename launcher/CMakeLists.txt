@@ -11,11 +11,9 @@ add_executable(${MYEDITOR_BIN_NAME}
 )
 target_link_libraries(${MYEDITOR_BIN_NAME}
   PRIVATE
-  ${PROJECT_NAME}
-  myframe
-  imgui
-  glfw
   ${CMAKE_DL_LIBS}
+  glfw
+  ${PROJECT_NAME}
 )
 
 #### install
