@@ -11,9 +11,8 @@ target_include_directories(builtin_panel
 )
 target_link_libraries(builtin_panel
   PUBLIC
-  Threads::Threads
-  imgui
   myframe
+  imgui
 )
 
 ### install
