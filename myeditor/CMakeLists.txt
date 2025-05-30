@@ -18,8 +18,6 @@ target_link_libraries(${PROJECT_NAME}
   PRIVATE
   nativefiledialog
   PUBLIC
-  Threads::Threads
-  GLEW::glew
   imgui
   myframe
 )

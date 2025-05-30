@@ -40,9 +40,6 @@ set(MYEDITOR_CONF_DIR "conf")
 set(MYEDITOR_PANEL_DIR "panel")
 
 ### deps libs
-find_package(Threads REQUIRED)
-find_package(gflags REQUIRED)
-find_package(glog REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(glew REQUIRED)
 find_package(glfw3 REQUIRED)

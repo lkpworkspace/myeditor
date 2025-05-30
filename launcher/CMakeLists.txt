@@ -13,6 +13,7 @@ target_link_libraries(${MYEDITOR_BIN_NAME}
   PRIVATE
   ${CMAKE_DL_LIBS}
   glfw
+  GLEW::glew
   ${PROJECT_NAME}
 )
 
