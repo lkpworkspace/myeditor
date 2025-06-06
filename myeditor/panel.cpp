@@ -30,4 +30,8 @@ void Panel::SetPanelContext(PanelContext* pc) {
   ctx_ = pc;
 }
 
+const Json::Value* Panel::GetConf() const {
+  return ctx_->GetConf();
+}
+
 } // namespace myeditor

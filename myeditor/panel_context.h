@@ -5,10 +5,10 @@ All rights reserved.
 Author: 李柯鹏 <likepeng0418@163.com>
 ****************************************************************************/
 #pragma once
-#include <json/json.h>
-
 #include <list>
 #include <memory>
+
+#include <json/json.h>
 
 #include "myframe/msg.h"
 
@@ -42,6 +42,7 @@ class PanelContext {
   void SetDisplayMenu(bool b = false);
 
   bool LoadConf(const Json::Value&);
+  const Json::Value* GetConf() const;
 
   PanelContextManager* GetPanelContextManger() const;
   void SetPanelContextManger(PanelContextManager*);

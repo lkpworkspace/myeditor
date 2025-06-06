@@ -30,6 +30,10 @@ bool PanelContext::LoadConf(const Json::Value& conf) {
   return true;
 }
 
+const Json::Value* PanelContext::GetConf() const {
+  return &config_;
+}
+
 bool PanelContext::Init() {
   return panel_->Init();
 }
