@@ -157,12 +157,15 @@ bool ModManager::CreatePanelContext(const Json::Value& config,
         LOG(ERROR) << "Create panel failed";
         return false;
       }
+      LOG(INFO) << "load instance panel."
+        << panel_class_name << " "
+        << inst.toStyledString(); 
       // create panel context instance
       auto panel_ctx = std::make_shared<PanelContext>(std::move(panel));
       panel_ctx->SetModName(type == "class" ? "class" : lib_name);
       panel_ctx->SetClassName(panel_class_name);
       panel_ctx->SetInstName(inst["name"].asString());
-      panel_ctx->LoadConf(inst);
+      panel_ctx->LoadConf(inst["config"]);
       panel_ctx_list->push_back(panel_ctx);
     }
   }
