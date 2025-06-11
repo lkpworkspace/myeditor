@@ -39,9 +39,7 @@ bool PanelContext::Init() {
 }
 
 void PanelContext::Update() {
-  if (show_) {
-    panel_->Update();
-  }
+  panel_->Update();
 }
 
 void PanelContext::ProcMessage() {
