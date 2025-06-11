@@ -21,6 +21,18 @@ target_link_libraries(${PROJECT_NAME}
   imgui
   myframe
 )
+if (glog_lib_type STREQUAL "STATIC_LIBRARY")
+  target_link_libraries(${PROJECT_NAME}
+    PRIVATE
+    glog::glog
+  )
+endif ()
+if (glog_lib_type STREQUAL "STATIC_LIBRARY")
+  target_link_options(${PROJECT_NAME}
+    PRIVATE
+    "$<$<CXX_COMPILER_ID:GNU,Clang>:LINKER:--exclude-libs,ALL>"
+  )
+endif ()
 
 # export file
 include (GenerateExportHeader)

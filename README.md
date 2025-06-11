@@ -5,7 +5,7 @@ myeditor
 # 快速本地构建
 
 ```sh
-mypm install -p ${PWD}/output --one-folder myframe,dev
+mypm install -p ${PWD}/output --one-folder myframe,dev --deps gflags,2.2.2,static glog,0.6.0,static
 mypm install -p ${PWD}/output --one-folder imgui,docking-1.91.9b-cmake
 mypm install -p ${PWD}/output --one-folder glfw,3.4
 mypm install -p ${PWD}/output --one-folder glew,2.2.0

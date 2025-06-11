@@ -16,6 +16,12 @@ target_link_libraries(${MYEDITOR_BIN_NAME}
   GLEW::glew
   ${PROJECT_NAME}
 )
+if (glog_lib_type STREQUAL "STATIC_LIBRARY")
+  target_link_libraries(${MYEDITOR_BIN_NAME}
+    PRIVATE
+    glog::glog
+  )
+endif ()
 
 #### install
 install(TARGETS

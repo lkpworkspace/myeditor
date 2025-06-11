@@ -43,8 +43,11 @@ set(MYEDITOR_PANEL_DIR "panel")
 find_package(OpenGL REQUIRED)
 find_package(glew REQUIRED)
 find_package(glfw3 REQUIRED)
+find_package(glog REQUIRED)
 find_package(myframe REQUIRED)
 find_package(imgui REQUIRED)
+
+get_target_property(glog_lib_type glog::glog TYPE)
 
 ### editor
 add_subdirectory(3rd/nativefiledialog)
