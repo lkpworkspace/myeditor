@@ -19,7 +19,7 @@ bool PanelContextManager::RegPanelContext(
       LOG(ERROR) << "Reg panel context " << pc->GetPanelName() << " failed";
       return false;
     }
-    LOG(INFO) << "reg panel " << pc->GetPanelName();
+    LOG(INFO) << "Reg panel " << pc->GetPanelName();
     panel_ctxs_[pc->GetPanelName()] = pc;
     return true;
   }

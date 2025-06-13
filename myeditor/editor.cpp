@@ -42,7 +42,9 @@ bool Editor::LoadPanel(const Json::Value& config) {
     auto panel_ctx = panel_ctx_list[i];
     panel_ctx->SetPanelContextManger(panel_context_manager_.get());
     LOG(INFO) << "create panel " << panel_ctx->GetPanelName();
-    panel_context_manager_->RegPanelContext(panel_ctx);
+    if (!panel_context_manager_->RegPanelContext(panel_ctx)) {
+      return false;
+    }
   }
   return true;
 }
