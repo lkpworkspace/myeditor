@@ -117,7 +117,7 @@ bool ModManager::CreatePanelContext(const Json::Value& config,
     lib_name = config["lib"].asString();
     lib_name = myframe::Common::GetLibName(lib_name);
     if (!LoadMod(lib_dir_ / lib_name)) {
-      LOG(ERROR) << "load " << lib_name << "failed";
+      LOG(ERROR) << "load " << lib_name << " failed";
       return false;
     }
   }

@@ -1,0 +1,16 @@
+{
+  "type": "class",
+  "lib": "panel_myframe",
+  "panel": {
+    "PanelMyframe": [
+      {
+        "name": "1",
+        "config": {
+          "show": false,
+          "display_menu": false,
+          "warning_msg2panel_size": 10
+        }
+      }
+    ]
+  }
+}
